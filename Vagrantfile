@@ -42,12 +42,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
    config.vm.synced_folder "salt/srv/", "/srv/salt"
    config.vm.synced_folder "src", "/www_src"
 
- # install salt stack
-   config.vm.provision :shell,
-    :inline => 'wget -O - http://bootstrap.saltstack.org | sudo sh'
-
-
-
   # Salt-Stack configuration 
    config.vm.provision :salt do |salt|
 	salt.minion_config = "salt/minion.conf"
