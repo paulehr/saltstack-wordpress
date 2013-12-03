@@ -12,7 +12,7 @@ This is a set of configuration files needed for Vagrant to provision a virtual m
 
 * The salt state configs assume that you will be using a RedHat/CentOS based distro for your vagrant box. You can change the package names to reflect what Linux distribution you will be using. I have it noted in the approriate salt state files. 
 
-* You are using Mac OSX. Vagrant and Virtual Box will working in Windows and Linux, but I set all of this up on a Macbook Pro. 
+* You are using Mac OSX. Vagrant and Virtual Box will work in Windows and Linux, but I set all of this up on a Macbook Pro. 
 
 * This is going to be just used for development purposes only on a local machine. **DO NOT DEPLOY THIS VIRTUAL MACHINE TO A PRODUCTION ENVIRONMENT.** 
 
