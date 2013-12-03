@@ -8,30 +8,30 @@ This is a set of configuration files needed for Vagrant to provision a virtual m
 
 * You have a working knowledge of Vagrant and Virtual Box.
 
-* You do not need a deep understanding of salt-stack. Thisi s a pretty simple configuration and we will be setting it up masterless. If you run into issues, consult their documentation. 
+* You do not need a deep understanding of salt-stack. This is a pretty simple configuration and we will be setting it up masterless. 
 
 * The salt state configs assume that you will be using a RedHat/CentOS based distro for your vagrant box. You can change the package names to reflect what Linux distribution you will be using. I have it noted in the approriate salt state files. 
 
-* You are using Mac OSX. Vagrant and Virtual Box will work in Windows and Linux, but I set all of this up on a Macbook Pro. 
+* You are using Mac OSX as a host. Vagrant and Virtual Box will work in Windows and Linux.I set all of this up and tested on a Macbook Pro. 
 
 * This is going to be just used for development purposes only on a local machine. **DO NOT DEPLOY THIS VIRTUAL MACHINE TO A PRODUCTION ENVIRONMENT.** 
 
 
 ### Setup - vagrant-salt 
 
-First, you want to make sure the vagrant box you are using has the latest guest-addons installed. next we will need to install the vagrant-salt plugin. When vagrant provisions a new virtual machine, it will automatically install the salt-stack packages. 
-
+Before we begin, you will want to make sure the vagrant box you are using has the latest guest-addons installed. If you have the latest guest-addons installed, run the following command to install the plugin: 
 
     vagrant plugin install vagrant-salt 
 
+When vagrant provisions a new virtual machine, it will automatically install the salt-stack packages. 
 
 ### Setup - Get the files 
 
-Clone the repository to grab all files and the directory structure you will need 
+Clone the repository to grab all files and the directory structures. 
 
     git clone https://github.com/paulehr/saltstack-wordpress.git
 
-This will create a directory structure like the following
+Once the clone is completed you will have the following files/directories. 
 
     saltstack-wordpress/
     	Vagrantfile
@@ -53,7 +53,7 @@ This will create a directory structure like the following
 				wp-dev/
 					init.sls
 
-				
+You can rename the saltstack-wordpress directory if you want at this point. 				
 
 ### Setup - Vagrantfile 
 
@@ -69,7 +69,7 @@ Change this to what you want the hostname of the virtual machine to be.
 
 	config.vm.network :private_network, ip: "192.168.0.10"
 
-This is so we can setup a consistent IP to access the VM with via the host machine. Also note what you set this to as it will need to match one of the settings in the salt state files.
+This is so we can setup a consistent IP to access the VM with via the host machine. Also note what you set this to as it will need to match in the wordpress salt state file 
 
     config.vm.synced_folder "salt/srv/", "/srv/salt"
 
@@ -78,7 +78,7 @@ Here we setup a sync folder between the host and the virtual machine. This is go
 
     config.vm.synced_folder "src", "/www_src"
 
-This is where your wordpress files will be stored so that both the host and the virtual machine will have access. if you change where this gets mounted in the virtual machine. You will need to make sure you make the change in the salt state file. 
+This is where your wordpress files will be stored so that both the host and the virtual machine will have access. if you change where this gets mounted in the virtual machine. You will need to make sure you make the change in the wordpress salt state file. 
 
     config.vm.provision :salt do |salt|
             salt.minion_config = "salt/minion.conf"
@@ -86,7 +86,7 @@ This is where your wordpress files will be stored so that both the host and the 
             salt.verbose = true
     end
 
-Here is the configuration entries for the salt minion. If you cloned the repository you shouldn’t need to make any changes here. This tells us where the minion.conf file is for the salt minion, run salt highstate, and we want verbose turned on.
+Here is the configuration entries for the salt minion. If you cloned the repository you shouldn’t need to make any changes here. This tells us where the minion.conf file is for the salt minion, run salt highstate, and that verbose is turned on. It’s a good idea to keep this on for troubleshooting purposes. 
 
 ### Setup - salt/
 
@@ -94,7 +94,7 @@ This directory holds minion.conf and the srv directory which holds all of the sa
 
 ### Setup - salt/minion.conf
 
-The minion.conf is the main configuration file used by the salt minion running in the virtual machine. if you cloned the repository you will not need to make any changes here. However here is what each of the following entries mean:
+The minion.conf is the main configuration file used by the salt minion running in the virtual machine. 
 
     file_client: local
 
@@ -107,6 +107,8 @@ This tells the salt minion that it’s masterless and all the configuration and 
     mysql.db: 'mysql'
 
 This is so that the salt minion can connect to a local MySQL server to execute commands. This will be needed later when we go to install/configure MySQL and Wordpress. 
+
+If you cloned the repository you will not need to make any changes to the minion.conf. 
 
 ### Setup - srv/top.sls
 
